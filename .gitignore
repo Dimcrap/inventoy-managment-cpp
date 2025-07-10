@@ -1,0 +1,26 @@
+#Compiled files
+*.exe 
+*.out
+*.o
+*.a
+*.so
+*.dll
+
+#Build directories
+build/
+bin/
+obj/
+Debug/
+Release/
+
+#IDE/Editor files
+.vscode/
+*.code-workspace
+*.suo
+*.user
+*.sln
+*.vcxproj*
+
+#System files
+.DS_Store
+Thumbs.db
