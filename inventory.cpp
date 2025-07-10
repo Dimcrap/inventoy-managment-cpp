@@ -101,7 +101,7 @@ void purchasing_request(){
         std::cout<<"unable to open directory!";
         main_screen();
     }
-    /**/
+    
     
     std::cout<<"\t\t\t\t<<purchasing item page>>\n\t\tselect the product:\n";
     //show the items
