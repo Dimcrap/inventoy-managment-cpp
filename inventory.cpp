@@ -2,6 +2,9 @@
 #include <cstring>
 #include <fstream>
 #include <sstream>              //stringstream
+#include <limits>
+
+
 /*
 1-Inventory tracking (stock levels, track product movements, and receive alerts for low stock)
 2-Purchsasing (Ordering the right amount of raw materials or goods.)
@@ -33,15 +36,21 @@ void branchs_report();
 void seller_inventories();
 void forecast_station();
 
+
+
+void searchingitem(std::string itemfield);
+
+
+/*
 struct products{
 
 };
 
 
-
 struct warehouse{
     int racknum;
 };
+*/
     
 
 
@@ -57,39 +66,83 @@ int main(){
 
 
 
+
 void main_screen(){
 
     int input;
-    std::cout<<"\t\t\t\twelcome to T-mobile inventory managment\n";
-    std::cout<<"\t\t1.tracking inventry of items\n\t\t2.Purchsasing availble items\n\t\t3.Supplier managment\n\t\t.4.Collaborative inventory status\n\t\t5.System integeration\n\t\t6.Product Forecasting system ";
+    std::cout<<"\t\t\t\t\n\nwelcome to T-mobile inventory managment\n\n\n";
+    std::cout<<"\t\t1.tracking inventry of items\n\t\t2.Purchsasing availble items\n\t\t3.Supplier managment\n\t\t.4.Collaborative inventory status\n\t\t5.System integeration\n\t\t6.Product Forecasting system \n";
     std::cin>>input;
     switch(input){
+        
         case 1:
         item_tracking();
-        
+        break;
+
         case 2:
         purchasing_request();
-        
+        break;
+
         case 3:
         supplier_managing();
-        
+        break;
+
         case 4:
         seller_inventories();
-        
+        break;
+
         case 5:
         branchs_report();
-        
-        case 6:
+        break;
 
+        case 6:
+        break;
         forecast_station();
 
+    };
+
+}
+
+
+
+
+void item_tracking(){
+
+    enum fields {
+        smartphones=1,
+        tablets,
+        smartwatchs,
+        accessories
+    };
+
+    int settlement;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout<<"\n\t\t\t-item tracking-\nchoose fields:1-SmartPhones\n2-Tablets\n3-Smartwatchs\n4-Accessories\n";
+    std::cin>>settlement;
+    switch (settlement)
+    {
+    case smartphones:
+        searchingitem("smartphone");
+        break;
+    case tablets :
+        searchingitem("tablet");
+        break;
+    case smartwatchs :
+        searchingitem("smartwatch");
+        break;
+    case accessories :
+        searchingitem("accessorie");
+        break;
+
+        default:  
+        break;
     }
 
-}
 
-int main(){
-    main_screen();
-}
+
+};
+
+
 
 
 void purchasing_request(){
@@ -106,7 +159,45 @@ void purchasing_request(){
     std::cout<<"\t\t\t\t<<purchasing item page>>\n\t\tselect the product:\n";
     //show the items
     std::cin>>selection_input;
-    //conditional reaction
+    //conditional respond
     
     
 }
+
+
+void branchs_report(){
+    /*
+   - updating report with a data
+    */
+
+
+
+
+};   
+
+
+void supplier_managing(){
+
+
+};
+
+
+
+
+void seller_inventories(){
+
+
+};
+
+
+void forecast_station(){
+
+
+};
+
+
+//          ******       inner functions       *****
+
+void searchingitem(std::string itemfield){};
+
+
