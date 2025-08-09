@@ -107,6 +107,8 @@ void main_screen(){
 
 
 void item_tracking(){
+//1-Inventory tracking (stock levels, track product movements,
+//and receive alerts for low stock)
 
     enum fields {
         smartphones=1,
@@ -134,7 +136,9 @@ void item_tracking(){
         searchingitem("accessorie");
         break;
 
-        default:  
+        default: 
+        std::cout<<"\nerror!\n" ;
+        main_screen();
         break;
     };
 
