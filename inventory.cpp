@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>              //stringstream
 #include <limits>
-
+#include <sqlite3.h>
 
 /*
 1-Inventory tracking (stock levels, track product movements, and receive alerts for low stock)
@@ -57,6 +57,13 @@ struct warehouse{
 
 int main(){
 
+     sqlite3* db;
+    
+    // 1. This creates the database file if it doesn't exist
+    if (sqlite3_open("mydatabase.db", &db) != SQLITE_OK) {
+        std::cerr << "Can't create database: " << sqlite3_errmsg(db) << std::endl;
+    };
+        return 1;
     main_screen();
 
 

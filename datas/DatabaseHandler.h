@@ -12,8 +12,17 @@ public:
 
 
     DatabaseHandler(const DatabaseHandler &)=delete;
-    
+    DatabaseHandler& operator=(const DatabaseHandler&)=delete;
 
+
+    bool backupDatabse(const std::string & backupPath);
+    
+    private:
+    sqlite3* db;
+    std::string DBPath;
+    
+    void executeSQL(const std::string & sql);
+    static int callback(void *data ,int argc,char ** argv);
     bool createTables();
 };
 
