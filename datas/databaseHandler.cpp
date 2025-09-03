@@ -49,5 +49,10 @@ void DatabaseHandler::executeSQL(const std::string & sql){
         sqlite3_free(errMsg);
         throw std::runtime_error("SQL error:"+error);
 
-    }
+    };
+
+};
+
+static int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){
+    
 };
