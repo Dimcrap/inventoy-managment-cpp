@@ -11,18 +11,25 @@
 2-Purchsasing (Ordering the right amount of raw materials or goods.)
 #3-Product categorization
 
-4-Supplier managment (facilitates vendor performance tracking, supplier information management, and communication between suppliers
- and businesses)
-↑↑↑[infromations about the supply from supplier to seller and other purpuses
-accessing all the branches,sellers  inventory statment by the sells and best seller statement . . .]
+4-Supplier managment (facilitates vendor performance tracking, 
+supplier information management, and communication between 
+suppliersand businesses)
+↑↑↑[infromations about the supply 
+from supplier to seller and other purpuses accessing all the 
+branches,sellers  inventory statment by the sells and best
+seller statement . . .]
 
-5-Collaborative inventory ( minimizes excess inventory and reduces lead times.exp:fea websites that sales your products will
- reporting for your action)
+5-Collaborative inventory ( minimizes excess inventory and
+reduces lead times.exp:fea websites that sales your products 
+will reporting for your action)
 ↑↑↑↑→→→↑↑↑↑←←←←↑↑↑↑ [sellers branchs order managing ]
-6-System integeration (track and coordinate inventory across multiple warehouse locations in real-time and synchronize 
+
+6-System integeration (track and coordinate inventory across 
+multiple warehouse locations in real-time and synchronize 
 this inventory data with their other systems.)
 
-7-Forecasting system (method used to predict inventory levels for a future time period)[it will push an forcast statement]
+7-Forecasting system (method used to predict inventory levels
+for a future time period)[it will push an forcast statement]
 */
 
 
@@ -210,6 +217,10 @@ void forecast_station(){
 
 //          ******       inner functions       *****
 
-void searchingitem(std::string itemfield){};
+void searchingitem(std::string itemfield){
+
+
+
+};
 
 

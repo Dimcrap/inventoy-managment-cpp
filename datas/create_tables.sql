@@ -4,14 +4,16 @@ DROP TABLE IF NOT EXISTS warehouse;
 DROP TABLE IF NOT EXISTS productsenroll;
 
 CREATE TABLE products (
-    productfeild TEXT NOT NULL,
+    feild TEXT NOT NULL,
+    model TEXT NOT NULL,
     Id INTEGER NOT NULL PRIMARY KEY,
-    count INTEGER ;
+    count INTEGER 
 
 );
 
 CREATE TABLE warehouse{
     Id INTEGER PRIMARY key,
+    filledspace INTEGER 
 };
 
 
@@ -22,7 +24,8 @@ CREATE TABLE productsenroll{
     FOREIGN KEY (werehous_id) REFERENCES warehouse(Id),
     FOREIGN KEY (product_id) REFERENCES products(Id),
 
-    UNIQUIE(werehous_id,product_id)
+  
+    UNIQUE(werehous_id,product_id)
 };
 
 

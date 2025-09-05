@@ -53,6 +53,32 @@ void DatabaseHandler::executeSQL(const std::string & sql){
 
 };
 
+std::vector <std::string> getitembyfield(std::string feild) {
+    std::vector<std::vector<std::string>> result;
+    std::string sql = "SELECT model,Id,count FROM products WHERE feild=" + "=std::to_string(feild)+";";
+   
+    char* errmsg = nullptr;
+    if (sqlite3_exec(db, c_str(), callback, &result , errmsg)!=SQLITE_OK) {
+        std::string error = errmsg;
+        sqlite3_free(errmsg);
+        throw std::runtime_error("SQL error:" + error);
+    }
+
+    if (!result.empty()) {
+        return result[0]
+    }
+
+    return {};
+
+};
+
 static int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){
-    
+    auto* result = static_cast<std::vector<std::vector<std::string>>*>(data);
+     std::vector<std::string> row
+    for (int i = 0; i < arc) {
+        row.emplace_back((argc[i]?std::string(arg[i]):"NULL");
+    }
+
+     result->push_back(row);
+     return 0;
 };

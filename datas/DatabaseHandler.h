@@ -3,7 +3,7 @@
 
 #include <sqlite3.h>
 #include <string>
-
+#include <vector>
 
 class DatabaseHandler{
 public:
@@ -15,6 +15,7 @@ public:
     DatabaseHandler& operator=(const DatabaseHandler&)=delete;
 
 
+    std::vector <std::string> getitembyfield(std::string feild);
     bool backupDatabse(const std::string & backupPath);
     
     private:
@@ -23,7 +24,7 @@ public:
     
     void executeSQL(const std::string & sql);
     static int callback(void *data ,int argc,char ** argv);
-    bool createTables();
+    
 };
 
 
