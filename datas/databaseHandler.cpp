@@ -1,6 +1,7 @@
 #include "databaseHandler.h"
 #include <iostream>
-//#include <sstream>
+#include <sstream>
+
 
 DatabaseHandler::DatabaseHandler(const std::string & dbPath):DBPath(dbPath),db(nullptr){
     int rc =sqlite3_open(dbPath.c_str(),&db);
@@ -53,9 +54,9 @@ void DatabaseHandler::executeSQL(const std::string & sql){
 
 };
 
-std::vector <std::string> getitembyfield(std::string feild) {
+std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
     std::vector<std::vector<std::string>> result;
-    std::string sql = "SELECT model,Id,count FROM products WHERE feild=" + "=std::to_string(feild)+";";
+    std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field=" + field+";";
    
     char* errmsg = nullptr;
     if (sqlite3_exec(db, c_str(), callback, &result , errmsg)!=SQLITE_OK) {
@@ -65,19 +66,27 @@ std::vector <std::string> getitembyfield(std::string feild) {
     }
 
     if (!result.empty()) {
-        return result[0]
+        return result[0];
     }
 
     return {};
 
 };
 
-static int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){
+
+bool addrequest(const std::string Rfield, int quantity) {
+
+    std::stringstream ss;
+};
+
+
+
+int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){
     auto* result = static_cast<std::vector<std::vector<std::string>>*>(data);
-     std::vector<std::string> row
-    for (int i = 0; i < arc) {
-        row.emplace_back((argc[i]?std::string(arg[i]):"NULL");
-    }
+    std::vector<std::string> row;
+    for (int i = 0; i < argc; i++) {
+        row.emplace_back(argv[i] ? std::string(argv[i]) : "NULL");
+    };
 
      result->push_back(row);
      return 0;

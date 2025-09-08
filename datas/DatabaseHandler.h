@@ -14,17 +14,18 @@ public:
     DatabaseHandler(const DatabaseHandler &)=delete;
     DatabaseHandler& operator=(const DatabaseHandler&)=delete;
 
-
-    std::vector <std::string> getitembyfield(std::string feild);
-    bool backupDatabse(const std::string & backupPath);
+    bool addrequest(const std::string Rfield, int quantity);
+    std::vector <std::string> getitembyfield(std::string field);
+    bool backupDatabse(const std::string& backupPath);
     
     private:
     sqlite3* db;
     std::string DBPath;
     
     void executeSQL(const std::string & sql);
-    static int callback(void *data ,int argc,char ** argv);
+    static int callback(void *data ,int argc,char ** argv,char ** azColName);
     
+
 };
 
 

@@ -4,17 +4,24 @@ DROP TABLE IF NOT EXISTS warehouse;
 DROP TABLE IF NOT EXISTS productsenroll;
 
 CREATE TABLE products (
-    feild TEXT NOT NULL,
-    model TEXT NOT NULL,
+    field TEXT NOT NULL,
     Id INTEGER NOT NULL PRIMARY KEY,
-    count INTEGER 
+    count INTEGER,
+    sellmotion TEXT NOT NULL,
+    alert TEXT 
 
+);
+
+CREATE TABLE requests(
+    requestfield TEXT NOT NULL,
+    requestscontent TEXT 
 );
 
 CREATE TABLE warehouse{
     Id INTEGER PRIMARY key,
     filledspace INTEGER 
 };
+
 
 
 CREATE TABLE productsenroll{

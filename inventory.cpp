@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>              //stringstream
 #include <limits>
-#include <sqlite3.h>
 #include <datas\DatabaseHandler.h>
 
 /*
@@ -37,7 +36,7 @@ for a future time period)[it will push an forcast statement]
                                //T-mobile  company branchs inventoty
 
 void main_screen();
-void item_tracking();
+void item_tracking(DatabaseHandler& dbhandlerobj);
 void purchasing_request();
 void supplier_managing();
 void branchs_report();
@@ -48,24 +47,13 @@ void forecast_station();
 
 void searchingitem(std::string itemfield);
 
-
-/*
-struct products{
-
-};
-
-
-struct warehouse{
-    int racknum;
-};
-*/
     
 
 
 
 int main(){
 
-     sqlite3* db;
+    DatabaseHandler db("datas/alldatas.db");
     
     // 1. This creates the database file if it doesn't exist
     if (sqlite3_open("datas/mydatabase.db", &db) != SQLITE_OK) {
@@ -121,10 +109,10 @@ void main_screen(){
 
 
 
-void item_tracking(){
+void item_tracking(DatabaseHandler& dbhandlerobj) {
 //1-Inventory tracking (stock levels, track product movements,
 //and receive alerts for low stock)
-
+    std::vector<std::string> data;
     enum fields {
         smartphones=1,
         tablets,
@@ -139,16 +127,16 @@ void item_tracking(){
     switch (settlement)
     {
     case smartphones:
-        searchingitem("smartphone");
+       data=dbhandlerobj.getitembyfield("smartphone");
         break;
     case tablets :
-        searchingitem("tablet");
+        data = dbhandlerobj.getitembyfield("tablet");
         break;
     case smartwatchs :
-        searchingitem("smartwatch");
+        data = dbhandlerobj.getitembyfield("smartwatch");
         break;
     case accessories :
-        searchingitem("accessorie");
+        data = dbhandlerobj.getitembyfield("accessorie");
         break;
 
         default: 
@@ -156,7 +144,22 @@ void item_tracking(){
         main_screen();
         break;
     };
+    //[ID ,count ,sellmotion ,alert]
+    for (int i = 0; i < 4; i++) {
+        switch (i)
+        {
+        case 0:
+            std::cout << "items warehouse ID:\n" << data[0];
+        case 1:
+            std::cout << "items units:\n" << data[1];
+        case 2:
+            std::cout << "items selling movment:\n" << data[2] << std::endl;
+        case 3:
+            (data[3] == "NULL") ? std::cout << "item has no alert notification" : std::cout << "alert:" << data[3];
 
+        }
+    };
+    main_screen();
 
 
 };
@@ -165,20 +168,19 @@ void item_tracking(){
 
 
 void purchasing_request(){
-    
-    int selection_input;
-           /*for reading↓↓↓↓*/
-    std::ifstream available_product("warehouse1.txt");
-    if(!available_product){
-        std::cout<<"unable to open directory!";
-        main_screen();
-    }
-    
-    
-    std::cout<<"\t\t\t\t<<purchasing item page>>\n\t\tselect the product:\n";
-    //show the items
-    std::cin>>selection_input;
-    //conditional respond
+   
+    int field;
+    std::string request;
+    std::cout << "\n\n\t\t\tordering product\n\n"<<
+    "1-smartphones    2-tablets\n3-smartwatchs\   4- accessoriesenter \n requestfield:";
+    std::cin >> field;
+    while (!std::cin||field<1||field>4) {
+        std::cerr << "\nunvalid input\n";
+        std::cin.clear(), std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "1-smartphones    2-tablets\n3-smartwatchs    4- accessoriesenter \n requestfield:";
+        std::cin >> field;
+    };
+    std::cout << "write down the request with the required quantity:";
     
     
 }
