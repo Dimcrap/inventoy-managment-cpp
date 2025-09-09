@@ -74,11 +74,20 @@ std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
 };
 
 
-bool addrequest(const std::string Rfield, int quantity) {
+bool DatabaseHandler::addrequest(const std::string Rfield, int quantity) {
 
     std::stringstream ss;
-};
+    ss << "INSERT INTO requests(requestfield,requestscontent)VALUES(" << Rfield << ";" << quantity << ");";
+try {
+    executeSQL(ss.str());
+    return true;
+}
+catch(const std::exception & e){
+    std::cerr << "Error adding request" << e.what() << std::endl;
+    return false;
+}
 
+};
 
 
 int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){

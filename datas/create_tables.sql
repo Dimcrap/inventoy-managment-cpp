@@ -23,6 +23,16 @@ CREATE TABLE warehouse{
 };
 
 
+CREATE TABLE reports{
+    category TEXT NOT NULL,
+    productinform TEXT ,
+    vendorinform TEXT,
+    vendorid TEXT NOT NULL,
+    branchreport TEXT
+
+};
+
+
 
 CREATE TABLE productsenroll{
     werehous_id INTEGER NOT NULL,

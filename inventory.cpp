@@ -110,8 +110,7 @@ void main_screen(){
 
 
 void item_tracking(DatabaseHandler& dbhandlerobj) {
-//1-Inventory tracking (stock levels, track product movements,
-//and receive alerts for low stock)
+
     std::vector<std::string> data;
     enum fields {
         smartphones=1,
@@ -167,20 +166,55 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
 
 
 
-void purchasing_request(){
+void purchasing_request(DatabaseHandler & dbhandlerobj){
    
     int field;
-    std::string request;
+    int request;
     std::cout << "\n\n\t\t\tordering product\n\n"<<
     "1-smartphones    2-tablets\n3-smartwatchs\   4- accessoriesenter \n requestfield:";
     std::cin >> field;
     while (!std::cin||field<1||field>4) {
         std::cerr << "\nunvalid input\n";
         std::cin.clear(), std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "1-smartphones    2-tablets\n3-smartwatchs    4- accessoriesenter \n requestfield:";
+        std::cout << "1-smartphones    2-tablets\n3-smartwatchs    4- accessories  \nenter requestfield:";
         std::cin >> field;
     };
-    std::cout << "write down the request with the required quantity:";
+    std::cout << "write down the request quantity:";
+    getline(std::cin, request);
+    //need input validatioin
+    bool result;
+    switch (field)
+    {
+    case 1:
+     result= dbhandlerobj.addrequest("smartphones",request);
+     break;
+    case 2:
+        result = dbhandlerobj.addrequest("tablets", request);
+        break;
+    case 3:
+        result = dbhandlerobj.addrequest("smartwatchs", request);
+        break;
+    case 4:
+        result = dbhandlerobj.addrequest("accessories", request);
+        break;
+    default:
+        std::cerr << "Error accurred!";
+        main_screen();
+
+    }
+
+    if (result) {
+        std::cout << "request added successfully\n";
+        main_screen();
+    }
+    else {
+        std::cerr << "\nerror accurred\n";
+        main_screen();
+
+    };
+
+
+    
     
     
 }
@@ -198,6 +232,24 @@ void branchs_report(){
 
 
 void supplier_managing(){
+    //mention that the smaertphones inventory must be recharged after 30%
+
+    /*4 - Supplier managment(
+       -facilitates vendor performance tracking,
+       -supplier information management,
+       -and communication between suppliers and businesses)
+        ↑↑↑[infromations about the supply
+        from supplier to seller and other purpuses accessing all the
+        branches, sellers  inventory statment by the sells and
+        *best seller statement . . .]*/
+    std::vector<std::string>menu = {};
+    int selection;
+    std::cout << "1 - smartphones    2 - tablets\n3 - smartwatchs    4 - accessories  \nenter requestfield : ";
+    std::cin >> selection;
+    while (!std::cin || selection < 1 || selection>4) {
+        std::cout << "unvalid retry\n1 - smartphones    2 - tablets\n3 - smartwatchs    4 - accessories  \nenter requestfield : ";        
+    };
+
 
 
 };
