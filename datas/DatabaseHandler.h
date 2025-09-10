@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <cstring>
 
 class DatabaseHandler{
 public:
@@ -15,10 +16,12 @@ public:
     DatabaseHandler(const DatabaseHandler &)=delete;
     DatabaseHandler& operator=(const DatabaseHandler&)=delete;
 
+
     bool addrequest(const std::string Rfield, int quantity);
     std::vector <std::string> getitembyfield(std::string field);
     bool backupDatabse(const std::string& backupPath);
-    
+    std::string getinfo(std::string infopart, std::string vendorid);
+
     private:
     sqlite3* db;
     std::string DBPath;

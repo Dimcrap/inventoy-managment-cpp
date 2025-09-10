@@ -23,15 +23,19 @@ CREATE TABLE warehouse{
 };
 
 
-CREATE TABLE reports{
-    category TEXT NOT NULL,
-    productinform TEXT ,
-    vendorinform TEXT,
+CREATE TABLE vendcare
+{
     vendorid TEXT NOT NULL,
-    branchreport TEXT
+    vendorstatement TEXT,
+    vendorsinforms TEXT,
+    sellmotion TEXT
 
-};
-
+};  
+    
+   /*
+    productsstatements TEXT ,
+    category TEXT NOT NULL,
+    branchreport TEXT*/
 
 
 CREATE TABLE productsenroll{

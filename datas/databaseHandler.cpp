@@ -56,7 +56,7 @@ void DatabaseHandler::executeSQL(const std::string & sql){
 
 std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
     std::vector<std::vector<std::string>> result;
-    std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field=" + field+";";
+    std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field = " + field+";";
    
     char* errmsg = nullptr;
     if (sqlite3_exec(db, c_str(), callback, &result , errmsg)!=SQLITE_OK) {
@@ -70,6 +70,26 @@ std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
     }
 
     return {};
+
+};
+
+std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) {
+    std::vector<std::string> result;
+    std::string sql="SELECT "+infopart+" FROM vendcare WHERE vendorid = "+vendorid+";";
+
+    char* errmsg = nullptr;
+    if (sqlite3_exec(db, c_str(), callback, &result, errmsg) != SQLITE_OK) {
+        std::string error = errmsg;
+        sqlite3_free(errmsg);
+        throw std::runtime_error("SQL error:" + error);
+    }
+    if (!result.empty()) {
+        return result[0];
+    }
+
+
+    return {};
+
 
 };
 

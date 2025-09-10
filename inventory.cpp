@@ -60,7 +60,7 @@ int main(){
         std::cerr << "Can't create database: " << sqlite3_errmsg(db) << std::endl;
     };
         return 1;
-    main_screen();
+    main_screen(db);
 
 
 };
@@ -70,7 +70,7 @@ int main(){
 
 
 
-void main_screen(){
+void main_screen(DatabaseHandler &dbhandlerobject){
 
     int input;
     std::cout<<"\t\t\t\t\n\nwelcome to T-mobile inventory managment\n\n\n";
@@ -79,15 +79,15 @@ void main_screen(){
     switch(input){
         
         case 1:
-        item_tracking();
+        item_tracking(dbhandlerobject);
         break;
 
         case 2:
-        purchasing_request();
+        purchasing_request(dbhandlerobject);
         break;
 
         case 3:
-        supplier_managing();
+        supplier_managing(dbhandlerobject);
         break;
 
         case 4:
@@ -231,7 +231,7 @@ void branchs_report(){
 };   
 
 
-void supplier_managing(){
+void supplier_managing(DatabaseHandler &dbclassobj){
     //mention that the smaertphones inventory must be recharged after 30%
 
     /*4 - Supplier managment(
@@ -244,11 +244,37 @@ void supplier_managing(){
         *best seller statement . . .]*/
     std::vector<std::string>menu = {};
     int selection;
-    std::cout << "1 - smartphones    2 - tablets\n3 - smartwatchs    4 - accessories  \nenter requestfield : ";
+    std::string result,vendorid;
+
+    std::cout << "please enter the vendor id:\n";
+    getline(std::cin, vendorid);
+
+
+    std::cout <<"\n1 - check vendor statement\n2 - check vendor informs\n3 - check selling movment \n";
     std::cin >> selection;
     while (!std::cin || selection < 1 || selection>4) {
-        std::cout << "unvalid retry\n1 - smartphones    2 - tablets\n3 - smartwatchs    4 - accessories  \nenter requestfield : ";        
+        std::cout << "unvalid nput\n1-check vendor statement\n2-check vendor informs\n3-check selling movment \n ";
+        std::cin >> selection;
     };
+    try {
+        if (selection == 1) {
+            result = dbclassobj.getinfo("vendorstatement", vendorid);
+        }
+        if (selection == 2) {
+            result = dbclassobj.getinfo("vendorsinforms", vendorid);
+        };
+        if (selection == 3) {
+            result = dbclassobj.getinfo("sellmotioin", vendorid);
+        };
+        if (!result.empty())
+            std::cout << "\ninfo:\n" << result << std::endl;
+        main_screen();
+    }
+    catch(std::exception & e ){
+        std::cerr << "\n\t\t\terror getting info!\n";
+        main_screen();
+    };
+
 
 
 
