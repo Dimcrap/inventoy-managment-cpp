@@ -123,26 +123,29 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout<<"\n\t\t\t-item tracking-\nchoose fields:1-SmartPhones\n2-Tablets\n3-Smartwatchs\n4-Accessories\n";
     std::cin>>settlement;
-    switch (settlement)
-    {
-    case smartphones:
-       data=dbhandlerobj.getitembyfield("smartphone");
-        break;
-    case tablets :
-        data = dbhandlerobj.getitembyfield("tablet");
-        break;
-    case smartwatchs :
-        data = dbhandlerobj.getitembyfield("smartwatch");
-        break;
-    case accessories :
-        data = dbhandlerobj.getitembyfield("accessorie");
-        break;
+   
+    try{
+        switch (settlement)
+        {
+        case smartphones:
+            data = dbhandlerobj.getitembyfield("smartphone");
+            break;
+        case tablets:
+            data = dbhandlerobj.getitembyfield("tablet");
+            break;
+        case smartwatchs:
+            data = dbhandlerobj.getitembyfield("smartwatch");
+            break;
+        case accessories:
+            data = dbhandlerobj.getitembyfield("accessorie");
+            break;
 
-        default: 
-        std::cout<<"\nerror!\n" ;
+        };
+    }
+    catch (std::exception & e) {
+        std::cerr << "error accurred!" << e.what();
         main_screen();
-        break;
-    };
+    }
     //[ID ,count ,sellmotion ,alert]
     for (int i = 0; i < 4; i++) {
         switch (i)
@@ -180,7 +183,7 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
         std::cin >> field;
     };
     std::cout << "write down the request quantity:";
-    getline(std::cin, request);
+    std::cin>> request;
     //need input validatioin
     bool result;
     switch (field)
@@ -208,7 +211,7 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
         main_screen();
     }
     else {
-        std::cerr << "\nerror accurred\n";
+        std::cerr << "\ngoing to mainscreen\n";
         main_screen();
 
     };
