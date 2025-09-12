@@ -35,17 +35,15 @@ for a future time period)[it will push an forcast statement]
 
                                //T-mobile  company branchs inventoty
 
-void main_screen();
+void main_screen(DatabaseHandler& dbhandlerobj);
 void item_tracking(DatabaseHandler& dbhandlerobj);
-void purchasing_request();
-void supplier_managing();
+void purchasing_request(DatabaseHandler& dbhandlerobj);
+void supplier_managing(DatabaseHandler& dbhandlerobj);
+void seller_inventories(DatabaseHandler& dbhandlerobj);
 void branchs_report();
-void seller_inventories();
 void forecast_station();
 
 
-
-void searchingitem(std::string itemfield);
 
     
 
@@ -107,8 +105,6 @@ void main_screen(DatabaseHandler &dbhandlerobject){
 }
 
 
-
-
 void item_tracking(DatabaseHandler& dbhandlerobj) {
 
     std::vector<std::string> data;
@@ -167,8 +163,6 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
 };
 
 
-
-
 void purchasing_request(DatabaseHandler & dbhandlerobj){
    
     int field;
@@ -202,17 +196,17 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
         break;
     default:
         std::cerr << "Error accurred!";
-        main_screen();
+        main_screen(dbhandlerobj);
 
     }
 
     if (result) {
         std::cout << "request added successfully\n";
-        main_screen();
+        main_screen(dbhandlerobj);
     }
     else {
         std::cerr << "\ngoing to mainscreen\n";
-        main_screen();
+        main_screen(dbhandlerobj);
 
     };
 
@@ -224,9 +218,12 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
 
 
 void branchs_report(){
-    /*
-   - updating report with a data
-    */
+    int select;
+    int branchnum;
+    std::cout << "\n1-track branch warehouses\n2-check branch form\n3-main screen\n";
+    std::cin >> select;
+    std::cout << "\nenter branch number:";
+
 
 
 
@@ -235,16 +232,7 @@ void branchs_report(){
 
 
 void supplier_managing(DatabaseHandler &dbclassobj){
-    //mention that the smaertphones inventory must be recharged after 30%
-
-    /*4 - Supplier managment(
-       -facilitates vendor performance tracking,
-       -supplier information management,
-       -and communication between suppliers and businesses)
-        ↑↑↑[infromations about the supply
-        from supplier to seller and other purpuses accessing all the
-        branches, sellers  inventory statment by the sells and
-        *best seller statement . . .]*/
+  
     std::vector<std::string>menu = {};
     int selection;
     std::string result,vendorid;
@@ -271,19 +259,53 @@ void supplier_managing(DatabaseHandler &dbclassobj){
         };
         if (!result.empty())
             std::cout << "\ninfo:\n" << result << std::endl;
-        main_screen();
+        main_screen(dbclassobj);
     }
     catch(std::exception & e ){
-        std::cerr << "\n\t\t\terror getting info!\n";
-        main_screen();
+        std::cerr << "\n\t\t\terror getting info!\n"<<e.what();
+        main_screen(dbclassobj);
     };
 
-
-
+    std::cout << "requested info:\n" << result;
+    main_screen(dbclassobj);
 
 };
 
+void seller_inventories(DatabaseHandler& dbhandlerobj) {
+    int request;
+    std::string info;
+    std::cout << "1-get essential status\n2-get space filled amount\n";
+    std::cin >> request;
+    while (!std::cin || request > 2 || request < 1) {
+        std::cout << "unvalid input try again1-get essential status\n2-get space filled amount\n";
+            std::cin >> request;
+    }
+    
+    try {
 
+    if (request == 1) {
+        std::string result=dbhandlerobj.getwarehousinfo("warhouseinforms");
+        std::cout << "\ninforms:\n" << result;
+    };
+    if (request == 2) {
+        std::string result = dbhandlerobj.getwarehousinfo("filledspace");
+        if (result == "NULL") {
+            std::cout << "demanded warehous is empty.";
+            main_screen(dbhandlerobj);
+        };
+        std::cout << "warehous stock level is %" << result << " filled";
+    }
+    }
+    catch (std::exception& e) {
+        std::cout << "error accured!\n" << e.what();
+        main_screen(dbhandlerobj);
+    }
+    
+    //could apply some delay 
+        std::cout << "going to the main screen . . .\n";
+        main_screen(dbhandlerobj);
+
+};
 
 
 void seller_inventories(){
@@ -298,12 +320,5 @@ void forecast_station(){
 };
 
 
-//          ******       inner functions       *****
-
-void searchingitem(std::string itemfield){
-
-
-
-};
 
 

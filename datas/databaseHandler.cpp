@@ -93,6 +93,22 @@ std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) 
 
 };
 
+std::string DatabaseHandler::getwarehousinfo(std::string section) {
+    std::vector<std::string> result;
+    std::string sql = "SELECT "+section+" FROM warehouse WHERE warehoustype = collaborative";
+    char* errmsg;
+    if (!sqlite3_exec(db, sql.c_str(), callback, &result, errmsg)) {
+        std::string error = errmsg;
+        sqlite3_free(errmsg);
+        throw std::runtime_error("SQL error:" + error);
+    }
+    if (!result.empty()) {
+        return result[0];
+    }
+
+    return {};
+
+};
 
 bool DatabaseHandler::addrequest(const std::string Rfield, int quantity) {
 

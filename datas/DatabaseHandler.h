@@ -21,8 +21,10 @@ public:
     std::vector <std::string> getitembyfield(std::string field);
     bool backupDatabse(const std::string& backupPath);
     std::string getinfo(std::string infopart, std::string vendorid);
+    std::string DatabaseHandler::getwarehousinfo(std::string section);
 
-    private:
+
+private:
     sqlite3* db;
     std::string DBPath;
     

@@ -19,9 +19,16 @@ CREATE TABLE requests(
 
 CREATE TABLE warehouse{
     Id INTEGER PRIMARY key,
-    filledspace INTEGER 
+    warehousetype TEXT NOT NULL,
+    filledspace INTEGER,
+    warhouseinforms TEXT,
+    branch INT NOT NULL
 };
 
+CREATE TABLE branch{
+    branchnum int NOT NULL,
+    storingwarehousetypes TEXT
+}
 
 CREATE TABLE vendcare
 {
