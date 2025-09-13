@@ -22,8 +22,8 @@ public:
     bool backupDatabse(const std::string& backupPath);
     std::string getinfo(std::string infopart, std::string vendorid);
     std::string DatabaseHandler::getwarehousinfo(std::string section);
-
-
+    std::vector<std::string>getwarehouseinbranch(int brancnum);
+    
 private:
     sqlite3* db;
     std::string DBPath;

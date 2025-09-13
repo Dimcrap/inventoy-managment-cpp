@@ -125,6 +125,20 @@ catch(const std::exception & e){
 
 };
 
+std::vector<std::string>getwarehouseinbranch(int brancnum) {
+    std::vector<std::string >warehouses;
+    std::string sql = "SELECT warehouse.Id FROM warehouse JOIN branch ON warehouse.branch = branch.branchnum"
+        "WHERE branch.branchnum = ?;";
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    
+    if (rc=!SQLITE_OK) {
+
+    }
+
+
+};
 
 int DatabaseHandler::callback(void *data ,int argc,char ** argv,char** azColName){
     auto* result = static_cast<std::vector<std::vector<std::string>>*>(data);

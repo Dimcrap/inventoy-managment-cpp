@@ -1,2 +1,6 @@
 
 -make at least two type of warehouse
+-relat wharehouses to their branch that 
+contains the type of them 
+*branch 1 contains collabrative warehouses
+

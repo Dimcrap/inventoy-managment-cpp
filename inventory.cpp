@@ -222,9 +222,16 @@ void branchs_report(){
     int branchnum;
     std::cout << "\n1-track branch warehouses\n2-check branch form\n3-main screen\n";
     std::cin >> select;
+    while (!std::cin || select < 1 || select>3) {
+        std::cout << "unvalid input !try again";
+        std::cout << "\n1-track branch warehouses\n2-check branch form\n3-main screen\n";
+        std::cin >> select;
+    };
+
     std::cout << "\nenter branch number:";
+    std::cin >> branchnum;
 
-
+    
 
 
 
