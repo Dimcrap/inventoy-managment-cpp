@@ -1,7 +1,10 @@
-
 DROP TABLE IF NOT EXISTS products;
 DROP TABLE IF NOT EXISTS warehouse;
 DROP TABLE IF NOT EXISTS productsenroll;
+DROP TABLE IF NOT EXISTS requests;
+DROP TABLE IF NOT EXISTS  branch;
+DROP TABLE IF NOT EXISTS  vendcare;
+DROP TABLE IF NOT EXISTS branchenrollment;
 
 CREATE TABLE products (
     field TEXT NOT NULL,
@@ -9,12 +12,6 @@ CREATE TABLE products (
     count INTEGER,
     sellmotion TEXT NOT NULL,
     alert TEXT 
-
-);
-
-CREATE TABLE requests(
-    requestfield TEXT NOT NULL,
-    requestscontent TEXT 
 );
 
 CREATE TABLE warehouse{
@@ -22,13 +19,20 @@ CREATE TABLE warehouse{
     warehousetype TEXT NOT NULL,
     filledspace INTEGER,
     warhouseinforms TEXT,
-    branch INT NOT NULL
+    branch INT NOT NULL,
+    FOREIGN KEY(branch) REFERENCES branch(branchnum)
 };
 
 CREATE TABLE branch{
-    branchnum int NOT NULL,
-    storingwarehousetypes TEXT
+    branchnum int NOT NULL PRIMARY KEY,
+    storingwarehousetypes TEXT,
+    branchinform
 }
+
+CREATE TABLE requests(
+    requestfield TEXT NOT NULL,
+    requestscontent TEXT 
+);
 
 CREATE TABLE vendcare
 {
@@ -39,13 +43,9 @@ CREATE TABLE vendcare
 
 };  
     
-   /*
-    productsstatements TEXT ,
-    category TEXT NOT NULL,
-    branchreport TEXT*/
+  
 
-
-CREATE TABLE productsenroll{
+CREATE TABLE enrollment{
     werehous_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
 
@@ -55,6 +55,8 @@ CREATE TABLE productsenroll{
   
     UNIQUE(werehous_id,product_id)
 };
+
+
 
 
 /*

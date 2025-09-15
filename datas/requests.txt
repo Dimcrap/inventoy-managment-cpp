@@ -1,6 +1,11 @@
 
+-make alert of a product for once at least
+-make one field of products emtpy count
+-create product with same field but
+diffrent id
 -make at least two type of warehouse
 -relat wharehouses to their branch that 
 contains the type of them 
 *branch 1 contains collabrative warehouses
-
+-fill two kinda of branch info 
+part(onw filled and one part must be empty)

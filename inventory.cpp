@@ -40,8 +40,8 @@ void item_tracking(DatabaseHandler& dbhandlerobj);
 void purchasing_request(DatabaseHandler& dbhandlerobj);
 void supplier_managing(DatabaseHandler& dbhandlerobj);
 void seller_inventories(DatabaseHandler& dbhandlerobj);
-void branchs_report();
-void forecast_station();
+void branchs_report(DatabaseHandler& dbhandlerobj);
+void forecast_station(DatabaseHandler& dbhandlerobj);
 
 
 
@@ -72,7 +72,7 @@ void main_screen(DatabaseHandler &dbhandlerobject){
 
     int input;
     std::cout<<"\t\t\t\t\n\nwelcome to T-mobile inventory managment\n\n\n";
-    std::cout<<"\t\t1.tracking inventry of items\n\t\t2.Purchsasing availble items\n\t\t3.Supplier managment\n\t\t.4.Collaborative inventory status\n\t\t5.System integeration\n\t\t6.Product Forecasting system \n";
+    std::cout<<"\t\t1.tracking inventry of items\n\t\t2.Purchsasing availble items\n\t\t3.Supplier managment\n\t\t.4.Collaborative inventory status\n\t\t5.Branch managment\n\t\t6.Product Forecasting system \n";
     std::cin>>input;
     switch(input){
         
@@ -217,7 +217,7 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
 }
 
 
-void branchs_report(){
+void branchs_report(DatabaseHandler& dbhandlerobj){
     int select;
     int branchnum;
     std::cout << "\n1-track branch warehouses\n2-check branch form\n3-main screen\n";
@@ -231,7 +231,37 @@ void branchs_report(){
     std::cout << "\nenter branch number:";
     std::cin >> branchnum;
 
-    
+    if (select == 1) {
+        std::vector <std::string> warehouses;
+        try {
+            warehouses = dbhandlerobj.getwarehouseinbranch(branchnum);
+        }
+        catch (std::exception& e) {
+            std::cerr << "error accurred " << e.what();
+            main_screen(dbhandlerobj);
+        }
+        for (std::string warehouse : warehouses) {
+            std::cout << warehouse << " ";
+        }
+        main_screen(dbhandlerobj);
+
+    }
+    else if (select == 2) {
+        std::string inform;
+        try {
+            inform = dbhandlerobj.getbranchinfo(branchnum);
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error accurred!\n" << e.what();
+        };
+        if (inform.empty()) {
+            std::cout << "\nno inform registred\n";
+            main_screen(dbhandlerobj);
+        }
+        std::cout << std::endl << inform << std::endl;
+        main_screen(dbhandlerobj);
+
+    };
 
 
 
@@ -315,13 +345,26 @@ void seller_inventories(DatabaseHandler& dbhandlerobj) {
 };
 
 
-void seller_inventories(){
 
 
-};
 
+void forecast_station(DatabaseHandler& dbhandlerobj){
+/*    7 - Forecasting system(method used to predict inventory
+   levels for a future time period)[it will push an 
+   forcast statement]
+  */
+    std::string field;
+    std::cout << "select field for its forcastion:\n";
+    getline(std::cin,field);
+    std::string forcastinform;
+    std::string sellmotion;
 
-void forecast_station(){
+    try {
+        
+    }
+    catch{
+
+    }
 
 
 };
