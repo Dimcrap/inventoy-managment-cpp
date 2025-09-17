@@ -6,25 +6,29 @@ DROP TABLE IF NOT EXISTS  branch;
 DROP TABLE IF NOT EXISTS  vendcare;
 DROP TABLE IF NOT EXISTS branchenrollment;
 
+
 CREATE TABLE products (
     field TEXT NOT NULL,
     Id INTEGER NOT NULL PRIMARY KEY,
     count INTEGER,
     sellmotion TEXT NOT NULL,
-    alert TEXT 
+    alert TEXT ,
+    warehousID  INTEGER PRIMARY KEY;
+    FOREIGN KEY(warehousID) REFERENCES warehouse(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE warehouse{
-    Id INTEGER PRIMARY key,
+    Id INTEGER PRIMARY key, 
     warehousetype TEXT NOT NULL,
     filledspace INTEGER,
     warhouseinforms TEXT,
     branch INT NOT NULL,
-    FOREIGN KEY(branch) REFERENCES branch(branchnum)
+    FOREIGN KEY(branch) REFERENCES branch(branchnum) 
+    ON DELETE CASCADE
 };
 
 CREATE TABLE branch{
-    branchnum int NOT NULL PRIMARY KEY,
+    branchnum INT NOT NULL PRIMARY KEY,
     storingwarehousetypes TEXT,
     branchinform
 }

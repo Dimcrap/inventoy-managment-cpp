@@ -42,7 +42,7 @@ void supplier_managing(DatabaseHandler& dbhandlerobj);
 void seller_inventories(DatabaseHandler& dbhandlerobj);
 void branchs_report(DatabaseHandler& dbhandlerobj);
 void forecast_station(DatabaseHandler& dbhandlerobj);
-
+int movementevaluator(std::vector <std::string> motions);
 
 
     
@@ -261,6 +261,9 @@ void branchs_report(DatabaseHandler& dbhandlerobj){
         std::cout << std::endl << inform << std::endl;
         main_screen(dbhandlerobj);
 
+    }
+    else if (select == 3) {
+        main_screen(dbhandlerobj);
     };
 
 
@@ -352,23 +355,47 @@ void forecast_station(DatabaseHandler& dbhandlerobj){
 /*    7 - Forecasting system(method used to predict inventory
    levels for a future time period)[it will push an 
    forcast statement]
-  */
-    std::string field;
-    std::cout << "select field for its forcastion:\n";
-    getline(std::cin,field);
+*/
+    std::cout << "\n===forcastion\n"
+        "press Enter to continue . . .";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
+    int branch;
+    std::cout << "\nenter branch number for its forcastion:\n";
+    std::cin>>branch;
     std::string forcastinform;
-    std::string sellmotion;
+    std::vector<std::string> sellmotions;
+
 
     try {
-        
+        sellmotions = dbhandlerobj.sellmotiongetter(branch);
+    }catch (std::exception& e) {
+        std::cerr << "error accurred!\n" << e.what();
+        main_screen(dbhandlerobj)\
+            ;
+    };
+    int process = movementevaluator(sellmotions);
+    if (process < 0) {
+        std::cout << "\nsell process is negetive \npossibilty of decreasing is high";
     }
-    catch{
-
+    else if (process > 0) {
+        std::cout << "\nsell movment is positive\npossibility of increasing is high";
     }
+    else {
+        std::cout << "\nits possible selling process to be stagnant ";
+    };
+    main_screen(dbhandlerobj);
+};
+int movementevaluator(std::vector <std::string> motions) {
+    int result=0;
 
+    for (std::string motion : motions) {
+        result = (motion.find("+") != std::string::npos) ? result + 1
+            : (motion.find("-") != std::string::npos) ? result - 2
+            : result;
+    }
+    return result;
 
 };
-
-
 
 

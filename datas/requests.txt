@@ -3,6 +3,7 @@
 -make one field of products emtpy count
 -create product with same field but
 diffrent id
+-ecpress the sell motion with "-,+,%"
 -make at least two type of warehouse
 -relat wharehouses to their branch that 
 contains the type of them 

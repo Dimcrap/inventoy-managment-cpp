@@ -6,6 +6,8 @@
 #include <vector>
 #include <exception>
 #include <cstring>
+#include <algorithm>
+#include <limits>
 
 class DatabaseHandler{
 public:
@@ -24,7 +26,7 @@ public:
     std::string DatabaseHandler::getwarehousinfo(std::string section);
     std::vector<std::string>getwarehouseinbranch(int brancnum);
     std::string getbranchinfo(int branchnum);
-    std::string sellmotiongetter(std::string pfield);
+    std::vector <std::string> sellmotiongetter(int branch);
     
 
 
@@ -35,6 +37,7 @@ private:
     void executeSQL(const std::string & sql);
     static int callback(void *data ,int argc,char ** argv,char ** azColName);
     
+    //PRAGMA foreign_keys = ON;
 
 };
 
