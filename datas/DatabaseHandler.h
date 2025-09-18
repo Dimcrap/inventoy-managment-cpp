@@ -1,7 +1,7 @@
 #ifndef DATABASEHANDLER_H
 #define DATABASEHANDLER_H
 
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <string>
 #include <vector>
 #include <exception>

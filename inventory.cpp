@@ -4,7 +4,7 @@
 #include <sstream>              //stringstream
 #include <limits>
 #include <datas\DatabaseHandler.h>
-
+#include <memory>
 /*
 1-Inventory tracking (stock levels, track product movements, and receive alerts for low stock)
 2-Purchsasing (Ordering the right amount of raw materials or goods.)
@@ -44,21 +44,27 @@ void branchs_report(DatabaseHandler& dbhandlerobj);
 void forecast_station(DatabaseHandler& dbhandlerobj);
 int movementevaluator(std::vector <std::string> motions);
 
-
+std::unique_ptr<DatabaseHandler> db;
     
 
 
 
 int main(){
 
-    DatabaseHandler db("datas/alldatas.db");
+    try {
+    db =std::make_unique<DatabaseHandler>("datas/alldatas.db");
     
-    // 1. This creates the database file if it doesn't exist
-    if (sqlite3_open("datas/mydatabase.db", &db) != SQLITE_OK) {
-        std::cerr << "Can't create database: " << sqlite3_errmsg(db) << std::endl;
+    }
+    catch (std::exception& e) {
+
+        std::cout << "Database Error:" << e.what() << std::endl;
+        return;
     };
-        return 1;
-    main_screen(db);
+    
+    
+    
+    
+    main_screen(*db);
 
 
 };
@@ -89,16 +95,16 @@ void main_screen(DatabaseHandler &dbhandlerobject){
         break;
 
         case 4:
-        seller_inventories();
+        seller_inventories(dbhandlerobject);
         break;
 
         case 5:
-        branchs_report();
+        branchs_report(dbhandlerobject);
         break;
 
         case 6:
         break;
-        forecast_station();
+        forecast_station(dbhandlerobject);
 
     };
 
@@ -140,7 +146,7 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
     }
     catch (std::exception & e) {
         std::cerr << "error accurred!" << e.what();
-        main_screen();
+        main_screen(dbhandlerobj);
     }
     //[ID ,count ,sellmotion ,alert]
     for (int i = 0; i < 4; i++) {
@@ -157,7 +163,7 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
 
         }
     };
-    main_screen();
+    main_screen(dbhandlerobj);
 
 
 };

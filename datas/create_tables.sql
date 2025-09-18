@@ -1,23 +1,21 @@
-DROP TABLE IF NOT EXISTS products;
-DROP TABLE IF NOT EXISTS warehouse;
-DROP TABLE IF NOT EXISTS productsenroll;
-DROP TABLE IF NOT EXISTS requests;
-DROP TABLE IF NOT EXISTS  branch;
-DROP TABLE IF NOT EXISTS  vendcare;
-DROP TABLE IF NOT EXISTS branchenrollment;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS warehouse;
+DROP TABLE IF EXISTS productsenroll;
+DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS  vendcare;
+DROP TABLE IF EXISTS  branch;
+DROP TABLE IF EXISTS  enrollment;
 
+CREATE TABLE branch (
 
-CREATE TABLE products (
-    field TEXT NOT NULL,
-    Id INTEGER NOT NULL PRIMARY KEY,
-    count INTEGER,
-    sellmotion TEXT NOT NULL,
-    alert TEXT ,
-    warehousID  INTEGER PRIMARY KEY;
-    FOREIGN KEY(warehousID) REFERENCES warehouse(Id) ON DELETE CASCADE
+    branchnum INT NOT NULL PRIMARY KEY,
+    storingwarehousestype TEXT,
+    branchinform
 );
 
-CREATE TABLE warehouse{
+
+CREATE TABLE warehouse(
+
     Id INTEGER PRIMARY key, 
     warehousetype TEXT NOT NULL,
     filledspace INTEGER,
@@ -25,13 +23,18 @@ CREATE TABLE warehouse{
     branch INT NOT NULL,
     FOREIGN KEY(branch) REFERENCES branch(branchnum) 
     ON DELETE CASCADE
-};
+);
 
-CREATE TABLE branch{
-    branchnum INT NOT NULL PRIMARY KEY,
-    storingwarehousetypes TEXT,
-    branchinform
-}
+CREATE TABLE products (
+    field TEXT NOT NULL,
+    Id INTEGER NOT NULL PRIMARY KEY,
+    count INTEGER,
+    sellmotion TEXT NOT NULL,
+    alert TEXT ,
+    warehousID  INTEGER ,
+    FOREIGN KEY(warehousID) REFERENCES warehouse(Id) ON DELETE CASCADE
+);
+
 
 CREATE TABLE requests(
     requestfield TEXT NOT NULL,
@@ -39,17 +42,18 @@ CREATE TABLE requests(
 );
 
 CREATE TABLE vendcare
-{
+(
+
     vendorid TEXT NOT NULL,
     vendorstatement TEXT,
     vendorsinforms TEXT,
     sellmotion TEXT
-
-};  
+);  
     
   
 
-CREATE TABLE enrollment{
+CREATE TABLE enrollment(
+
     werehous_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
 
@@ -58,7 +62,7 @@ CREATE TABLE enrollment{
 
   
     UNIQUE(werehous_id,product_id)
-};
+);
 
 
 

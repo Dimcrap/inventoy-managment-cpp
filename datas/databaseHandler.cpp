@@ -15,7 +15,7 @@ DatabaseHandler::DatabaseHandler(const std::string & dbPath):DBPath(dbPath),db(n
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
         throw std::runtime_error("Failed to enable foreign key support: " 
-            + std::string(sqlite3_errmsg(m_db)));
+            + std::string(sqlite3_errmsg(db)));
     }
 }
 
@@ -65,7 +65,7 @@ std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
     std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field = " + field+";";
    
     char* errmsg = nullptr;
-    if (sqlite3_exec(db, c_str(), callback, &result , errmsg)!=SQLITE_OK) {
+    if (sqlite3_exec(db, sql.c_str(), callback, &result , &errmsg)!=SQLITE_OK) {
         std::string error = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQL error:" + error);
@@ -84,7 +84,7 @@ std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) 
     std::string sql="SELECT "+infopart+" FROM vendcare WHERE vendorid = "+vendorid+";";
 
     char* errmsg = nullptr;
-    if (sqlite3_exec(db, c_str(), callback, &result, errmsg) != SQLITE_OK) {
+    if (sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg) != SQLITE_OK) {
         std::string error = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQL error:" + error);
@@ -103,7 +103,7 @@ std::string DatabaseHandler::getwarehousinfo(std::string section) {
     std::vector<std::string> result;
     std::string sql = "SELECT "+section+" FROM warehouse WHERE warehoustype = collaborative";
     char* errmsg;
-    if (SQLITE_OK!=sqlite3_exec(db, sql.c_str(), callback, &result, errmsg)) {
+    if (SQLITE_OK!=sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg)) {
         std::string error = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQL error:" + error);
@@ -173,7 +173,6 @@ std::string DatabaseHandler::getbranchinfo(int branchnum) {
     return {};
 };
 
-std::vector<std::string> alertgetter(branchnum)
 std::vector <std::string> DatabaseHandler::sellmotiongetter(int branch) {
     std::vector<std::vector<std::string>> result;
     
@@ -182,7 +181,7 @@ std::vector <std::string> DatabaseHandler::sellmotiongetter(int branch) {
         "JOIN branch ON warehouse.branch=branch.branchnum"
         "WHERE branch.branchnum = "+std::to_string(branch)+"; ";
     char* errmsg=nullptr;
-    if (sqlite3_exec(db, sql.c_str(), callback, &result, errmsg) != SQLITE_OK) {
+    if (sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg) != SQLITE_OK) {
         std::string err = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQl error" + err);
