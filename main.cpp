@@ -1,35 +1,5 @@
-#include <iostream>
-#include <cstring>
-#include <fstream>
-#include <sstream>              //stringstream
-#include <limits>
-#include <datas\DatabaseHandler.h>
+#include "datas\DatabaseHandler.h"
 #include <memory>
-/*
-1-Inventory tracking (stock levels, track product movements, and receive alerts for low stock)
-2-Purchsasing (Ordering the right amount of raw materials or goods.)
-#3-Product categorization
-
-4-Supplier managment (facilitates vendor performance tracking, 
-supplier information management, and communication between 
-suppliersand businesses)
-↑↑↑[infromations about the supply 
-from supplier to seller and other purpuses accessing all the 
-branches,sellers  inventory statment by the sells and best
-seller statement . . .]
-
-5-Collaborative inventory ( minimizes excess inventory and
-reduces lead times.exp:fea websites that sales your products 
-will reporting for your action)
-↑↑↑↑→→→↑↑↑↑←←←←↑↑↑↑ [sellers branchs order managing ]
-
-6-System integeration (track and coordinate inventory across 
-multiple warehouse locations in real-time and synchronize 
-this inventory data with their other systems.)
-
-7-Forecasting system (method used to predict inventory levels
-for a future time period)[it will push an forcast statement]
-*/
 
 
 
@@ -44,27 +14,34 @@ void branchs_report(DatabaseHandler& dbhandlerobj);
 void forecast_station(DatabaseHandler& dbhandlerobj);
 int movementevaluator(std::vector <std::string> motions);
 
-std::unique_ptr<DatabaseHandler> db;
-    
+
+
+
 
 
 
 int main(){
+ 
+ 
+ 
+ //std::unique_ptr<DatabaseHandler> db;
+ 
+ try {
+   auto db =std::make_unique<DatabaseHandler>("datas/alldatas.db");
+   
+   std::cout<<"|";
+   main_screen(*db);
+}
+catch (std::exception& e) {
+    
+std::cout << "Database Error:" << e.what() << std::endl;
+return 0;
+};
 
-    try {
-    db =std::make_unique<DatabaseHandler>("datas/alldatas.db");
-    
-    }
-    catch (std::exception& e) {
 
-        std::cout << "Database Error:" << e.what() << std::endl;
-        return;
-    };
     
+
     
-    
-    
-    main_screen(*db);
 
 
 };
@@ -72,13 +49,17 @@ int main(){
 
 
 
+/////////////////////////////////////////////////////
+
 
 
 void main_screen(DatabaseHandler &dbhandlerobject){
 
     int input;
-    std::cout<<"\t\t\t\t\n\nwelcome to T-mobile inventory managment\n\n\n";
-    std::cout<<"\t\t1.tracking inventry of items\n\t\t2.Purchsasing availble items\n\t\t3.Supplier managment\n\t\t.4.Collaborative inventory status\n\t\t5.Branch managment\n\t\t6.Product Forecasting system \n";
+    std::cout<<"\n\n\t\t\t\twelcome to T-mobile inventory managment\n\n\n";
+    std::cout<<"\t\t\t\t1.tracking inventry of items\n\t\t\t\t2.Purchsasing availble items"
+    "\n\t\t\t\t3.Supplier managment\n\t\t\t\t4.Collaborative inventory status\n\t\t\t\t5.Branch managment"
+    "\n\t\t\t\t6.Product Forecastion \n\n\n\t\t";
     std::cin>>input;
     switch(input){
         
@@ -103,8 +84,9 @@ void main_screen(DatabaseHandler &dbhandlerobject){
         break;
 
         case 6:
-        break;
         forecast_station(dbhandlerobject);
+        break;
+
 
     };
 
@@ -113,7 +95,7 @@ void main_screen(DatabaseHandler &dbhandlerobject){
 
 void item_tracking(DatabaseHandler& dbhandlerobj) {
 
-    std::vector<std::string> data;
+    std::vector<std::vector<std::string>> data;
     enum fields {
         smartphones=1,
         tablets,
@@ -123,20 +105,20 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
 
     int settlement;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout<<"\n\t\t\t-item tracking-\nchoose fields:1-SmartPhones\n2-Tablets\n3-Smartwatchs\n4-Accessories\n";
+    std::cout<<"\n\t\t\t-item tracking-\nchoose fields:\n1-SmartPhones\n2-Tablets\n3-Smartwatchs\n4-Accessories\n";
     std::cin>>settlement;
    
     try{
         switch (settlement)
         {
         case smartphones:
-            data = dbhandlerobj.getitembyfield("smartphone");
+            data = dbhandlerobj.getitembyfield("smartphones");
             break;
         case tablets:
-            data = dbhandlerobj.getitembyfield("tablet");
+            data = dbhandlerobj.getitembyfield("tablets");
             break;
         case smartwatchs:
-            data = dbhandlerobj.getitembyfield("smartwatch");
+            data = dbhandlerobj.getitembyfield("smartwatchs");
             break;
         case accessories:
             data = dbhandlerobj.getitembyfield("accessorie");
@@ -149,20 +131,32 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
         main_screen(dbhandlerobj);
     }
     //[ID ,count ,sellmotion ,alert]
-    for (int i = 0; i < 4; i++) {
-        switch (i)
-        {
-        case 0:
-            std::cout << "items warehouse ID:\n" << data[0];
-        case 1:
-            std::cout << "items units:\n" << data[1];
-        case 2:
-            std::cout << "items selling movment:\n" << data[2] << std::endl;
-        case 3:
-            (data[3] == "NULL") ? std::cout << "item has no alert notification" : std::cout << "alert:" << data[3];
+    std::cout<<"========================================================================\n";
 
-        }
-    };
+    for(int col=0;col<data.size();col++){
+
+        for (int i = 0; i < 4; i++) {
+            switch (i)
+            {
+                case 0:
+                std::cout << "\nitems warehouse ID: " << data[col][i];
+                break;
+                case 1:
+                std::cout << "\nitems units: " << data[col][i];
+                break;
+                case 2:
+                std::cout << "\nitems selling movment: " <<
+                data[col][i] ;
+                break;
+                case 3:
+                (data[col][i] == "NULL") ? std::cout << "\nitem has no alert notification" : std::cout << "\nalert:" << data[col][i];
+                break;
+            };
+        };
+        std::cout<<"\n";
+    }
+    std::cout<<"\n========================================================================";
+
     main_screen(dbhandlerobj);
 
 
@@ -172,9 +166,8 @@ void item_tracking(DatabaseHandler& dbhandlerobj) {
 void purchasing_request(DatabaseHandler & dbhandlerobj){
    
     int field;
-    int request;
-    std::cout << "\n\n\t\t\tordering product\n\n"<<
-    "1-smartphones    2-tablets\n3-smartwatchs\   4- accessoriesenter \n requestfield:";
+    std::string request;
+    std::cout << "\n\n\t\t\tordering product\n\n"<<"1-smartphones    2-tablets\n3-smartwatchs   4- accessoriesenter \n requestfield:";
     std::cin >> field;
     while (!std::cin||field<1||field>4) {
         std::cerr << "\nunvalid input\n";
@@ -182,7 +175,8 @@ void purchasing_request(DatabaseHandler & dbhandlerobj){
         std::cout << "1-smartphones    2-tablets\n3-smartwatchs    4- accessories  \nenter requestfield:";
         std::cin >> field;
     };
-    std::cout << "write down the request quantity:";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    std::cout << "write down the request quantity with warehous id:";
     std::cin>> request;
     //need input validatioin
     bool result;
@@ -233,6 +227,10 @@ void branchs_report(DatabaseHandler& dbhandlerobj){
         std::cout << "\n1-track branch warehouses\n2-check branch form\n3-main screen\n";
         std::cin >> select;
     };
+    
+     if (select == 3) {
+         main_screen(dbhandlerobj);
+     };
 
     std::cout << "\nenter branch number:";
     std::cin >> branchnum;
@@ -246,6 +244,9 @@ void branchs_report(DatabaseHandler& dbhandlerobj){
             std::cerr << "error accurred " << e.what();
             main_screen(dbhandlerobj);
         }
+        if(warehouses.empty()){
+            std::cout<<"No branch detected!";
+        };
         for (std::string warehouse : warehouses) {
             std::cout << warehouse << " ";
         }
@@ -268,9 +269,6 @@ void branchs_report(DatabaseHandler& dbhandlerobj){
         main_screen(dbhandlerobj);
 
     }
-    else if (select == 3) {
-        main_screen(dbhandlerobj);
-    };
 
 
 
@@ -283,14 +281,19 @@ void supplier_managing(DatabaseHandler &dbclassobj){
     int selection;
     std::string result,vendorid;
 
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
     std::cout << "please enter the vendor id:\n";
     getline(std::cin, vendorid);
 
-
-    std::cout <<"\n1 - check vendor statement\n2 - check vendor informs\n3 - check selling movment \n";
+while(selection!=4){
+    std::cout <<"\n1 - check vendor statement\n2 -"
+    " check vendor informs\n3 - check selling movment \n"
+    "4 - Exit\n";
     std::cin >> selection;
     while (!std::cin || selection < 1 || selection>4) {
-        std::cout << "unvalid nput\n1-check vendor statement\n2-check vendor informs\n3-check selling movment \n ";
+        std::cout << "unvalid nput\n1-check vendor statement"
+        "\n2-check vendor informs\n3-check selling movment \n"
+        "4 - Exit";
         std::cin >> selection;
     };
     try {
@@ -301,18 +304,23 @@ void supplier_managing(DatabaseHandler &dbclassobj){
             result = dbclassobj.getinfo("vendorsinforms", vendorid);
         };
         if (selection == 3) {
-            result = dbclassobj.getinfo("sellmotioin", vendorid);
+            result = dbclassobj.getinfo("sellmotion", vendorid);
         };
-        if (!result.empty())
-            std::cout << "\ninfo:\n" << result << std::endl;
-        main_screen(dbclassobj);
-    }
-    catch(std::exception & e ){
+        if(selection==4){
+            main_screen(dbclassobj);
+        };
+        if (!result.empty()){
+            std::cout << "\n=====================\n" << result <<
+             "\n=====================";
+             }else if(result.empty()){
+             std::cout<<"Error finding input";
+             };
+    }catch(std::exception & e ){
         std::cerr << "\n\t\t\terror getting info!\n"<<e.what();
         main_screen(dbclassobj);
     };
 
-    std::cout << "requested info:\n" << result;
+}
     main_screen(dbclassobj);
 
 };
@@ -320,26 +328,42 @@ void supplier_managing(DatabaseHandler &dbclassobj){
 void seller_inventories(DatabaseHandler& dbhandlerobj) {
     int request;
     std::string info;
-    std::cout << "1-get essential status\n2-get space filled amount\n";
+    std::cout << "1-get essential status\n2-get filled space amount\n";
     std::cin >> request;
     while (!std::cin || request > 2 || request < 1) {
-        std::cout << "unvalid input try again1-get essential status\n2-get space filled amount\n";
+        std::cout << "unvalid input try again1-get essential status"
+        "\n2-get filled space amount\n";
             std::cin >> request;
-    }
+    };
     
     try {
 
     if (request == 1) {
-        std::string result=dbhandlerobj.getwarehousinfo("warhouseinforms");
-        std::cout << "\ninforms:\n" << result;
+        std::vector <std::vector<std::string>> 
+        result=dbhandlerobj.getwarehousinfo("warhouseinforms");
+        for(int i=0;i<result.size();i++){
+
+            if(result[i][1]=="NULL"){
+                std::cout<<"\n no inform registred!";
+                main_screen(dbhandlerobj);
+            };
+                std::cout << "\nID:\n" << result[i][0]<<
+                "\ninforms:"<<result[i][1];
+        };
+        main_screen(dbhandlerobj);
     };
     if (request == 2) {
-        std::string result = dbhandlerobj.getwarehousinfo("filledspace");
-        if (result == "NULL") {
-            std::cout << "demanded warehous is empty.";
-            main_screen(dbhandlerobj);
+        std::vector <std::vector<std::string>>  
+         result = dbhandlerobj.getwarehousinfo("filledspace");
+        for(int i=0;i<result.size();i++){
+         if (result[i][1] == "NULL") {
+             std::cout << "demanded warehous is empty.";
+             main_screen(dbhandlerobj);
         };
-        std::cout << "warehous stock level is %" << result << " filled";
+        std::cout <<"\n\nwarehouse ID"<<result[i][0]<<
+         "\nwarehous stock level is %" << result[i][1] <<
+          " filled";
+        }
     }
     }
     catch (std::exception& e) {
@@ -348,7 +372,7 @@ void seller_inventories(DatabaseHandler& dbhandlerobj) {
     }
     
     //could apply some delay 
-        std::cout << "going to the main screen . . .\n";
+        std::cout << "\n\ngoing to the m5ain screen . . .\n";
         main_screen(dbhandlerobj);
 
 };
@@ -358,13 +382,10 @@ void seller_inventories(DatabaseHandler& dbhandlerobj) {
 
 
 void forecast_station(DatabaseHandler& dbhandlerobj){
-/*    7 - Forecasting system(method used to predict inventory
-   levels for a future time period)[it will push an 
-   forcast statement]
-*/
+std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    std::cin.clear();
     std::cout << "\n===forcastion\n"
         "press Enter to continue . . .";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
     int branch;
     std::cout << "\nenter branch number for its forcastion:\n";
@@ -381,6 +402,7 @@ void forecast_station(DatabaseHandler& dbhandlerobj){
             ;
     };
     int process = movementevaluator(sellmotions);
+    std::cout<<"\n====================================================";
     if (process < 0) {
         std::cout << "\nsell process is negetive \npossibilty of decreasing is high";
     }
@@ -390,6 +412,7 @@ void forecast_station(DatabaseHandler& dbhandlerobj){
     else {
         std::cout << "\nits possible selling process to be stagnant ";
     };
+    std::cout<<"\n====================================================";
     main_screen(dbhandlerobj);
 };
 int movementevaluator(std::vector <std::string> motions) {
@@ -403,5 +426,6 @@ int movementevaluator(std::vector <std::string> motions) {
     return result;
 
 };
+
 
 

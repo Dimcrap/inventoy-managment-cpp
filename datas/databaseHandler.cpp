@@ -1,7 +1,7 @@
-#include "databaseHandler.h"
+#include "DatabaseHandler.h"
 #include <iostream>
 #include <sstream>
-
+#include "sqlite3.h"
 
 DatabaseHandler::DatabaseHandler(const std::string & dbPath):DBPath(dbPath),db(nullptr){
     int rc =sqlite3_open(dbPath.c_str(),&db);
@@ -19,12 +19,13 @@ DatabaseHandler::DatabaseHandler(const std::string & dbPath):DBPath(dbPath),db(n
     }
 }
 
-DatabaseHandler::~DatabaseHandler(){
-    if(db){
+
+DatabaseHandler::~DatabaseHandler() {
+    if (db) {
         sqlite3_close(db);
+        db = nullptr;
     }
 }
-
 bool DatabaseHandler::backupDatabse(const std::string & backupPath){
 
     sqlite3 *backupDb;
@@ -60,9 +61,9 @@ void DatabaseHandler::executeSQL(const std::string & sql){
 
 };
 
-std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
+std::vector<std::vector <std::string>> DatabaseHandler::getitembyfield(std::string field) {
     std::vector<std::vector<std::string>> result;
-    std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field = " + field+";";
+    std::string sql = "SELECT Id,count,sellmotion,alert FROM products WHERE field = '" + field+"' ;";
    
     char* errmsg = nullptr;
     if (sqlite3_exec(db, sql.c_str(), callback, &result , &errmsg)!=SQLITE_OK) {
@@ -72,7 +73,7 @@ std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
     }
 
     if (!result.empty()) {
-        return result[0];
+        return result;
     }
 
     return {};
@@ -80,8 +81,8 @@ std::vector <std::string> DatabaseHandler::getitembyfield(std::string field) {
 };
 
 std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) {
-    std::vector<std::string> result;
-    std::string sql="SELECT "+infopart+" FROM vendcare WHERE vendorid = "+vendorid+";";
+    std::vector<std::vector<std::string>> result;
+    std::string sql="SELECT "+infopart+" FROM vendcare WHERE vendorid = '"+vendorid+"' ;";
 
     char* errmsg = nullptr;
     if (sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg) != SQLITE_OK) {
@@ -90,7 +91,7 @@ std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) 
         throw std::runtime_error("SQL error:" + error);
     }
     if (!result.empty()) {
-        return result[0];
+        return result[0][0];
     }
 
 
@@ -99,28 +100,30 @@ std::string DatabaseHandler::getinfo(std::string infopart,std::string vendorid) 
 
 };
 
-std::string DatabaseHandler::getwarehousinfo(std::string section) {
-    std::vector<std::string> result;
-    std::string sql = "SELECT "+section+" FROM warehouse WHERE warehoustype = collaborative";
+std::vector <std::vector<std::string>>
+DatabaseHandler::getwarehousinfo(std::string section) {
+    std::vector<std::vector<std::string>> result;
+    std::string sql = "SELECT Id,"+section+" FROM warehouse WHERE warehousetype = 'collabrativestorage'";
     char* errmsg;
     if (SQLITE_OK!=sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg)) {
         std::string error = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQL error:" + error);
-    }
+    };
 
     if (!result.empty()) {
-        return result[0];
-    }
+        return result;
+    };
 
     return {};
 
 };
 
-bool DatabaseHandler::addrequest(const std::string Rfield, int quantity) {
+bool DatabaseHandler::addrequest(const std::string Rfield, std::string quantity) {
 
     std::stringstream ss;
-    ss << "INSERT INTO requests(requestfield,requestscontent)VALUES(" << Rfield << ";" << quantity << ");";
+    ss << "INSERT INTO requests(requestfield,requestscontent)"
+    "VALUES('" << Rfield << "' , '" << quantity << "' );";
 try {
     executeSQL(ss.str());
     return true;
@@ -133,29 +136,36 @@ catch(const std::exception & e){
 };
 
 std::vector<std::string> DatabaseHandler::getwarehouseinbranch(int brancnum) {
-    std::vector <std::vector<std::string >>warehouses;
-    std::string sql = "SELECT warehouse.Id FROM warehouse"
-        "JOIN branch ON warehouse.branch = branch.branchnum"
-        "WHERE branch.branchnum = "+std::to_string(brancnum)+";";
+    std::vector<std::string>warehouseIDs;
+    std::string sql = "SELECT warehouse.Id FROM warehouse "
+        "JOIN branch ON warehouse.branch = branch.branchnum "
+        "WHERE branch.branchnum = "+std::to_string(brancnum)+" ;";
 
     char* errmsg = nullptr;
-    if (sqlite3_exec(db, sql.c_str(), callback, &warehouses, &errmsg) != SQLITE_OK) {
+    if (sqlite3_exec(db, sql.c_str(), [](void* data,int argc,
+        char ** argv,char ** azColName) -> int{
+            auto * ids=static_cast<std::vector<std::string>*>(data);
+            if(argc>0&&argv[0]){
+                ids->push_back(argv[0]);
+            }
+            return 0;
+        }, &warehouseIDs, &errmsg) != SQLITE_OK) {
         std::string err = errmsg;
         sqlite3_free(errmsg);
         throw std::runtime_error("SQL error" + err);
     };
 
-    if (!warehouses.empty()) {
-        return warehouses[0];
+    if (!warehouseIDs.empty()) {
+        return warehouseIDs;
     }
    
     return {};
 };
 
 std::string DatabaseHandler::getbranchinfo(int branchnum) {
-    std::vector <std::string> result;
-    std::string sql = "SELECT branchinform FROM branch"
-        "WHERE branch.brnachnum="+std::to_string(branchnum)+";";
+    std::vector<std::vector<std::string>> result;
+    std::string sql = "SELECT branchinform FROM branch "
+        "WHERE branch.branchnum = "+std::to_string(branchnum)+" ;";
 
     
     char* errmsg;
@@ -167,7 +177,7 @@ std::string DatabaseHandler::getbranchinfo(int branchnum) {
         return {};
     };
     if (!result.empty()) {
-        return result[0];
+        return result[0][0];
     };
     
     return {};
@@ -176,10 +186,10 @@ std::string DatabaseHandler::getbranchinfo(int branchnum) {
 std::vector <std::string> DatabaseHandler::sellmotiongetter(int branch) {
     std::vector<std::vector<std::string>> result;
     
-    std::string sql = "SELECT sellmotion FROM products"
-        "JOIN warehouse ON products.warehouseID=warehouse.Id"
-        "JOIN branch ON warehouse.branch=branch.branchnum"
-        "WHERE branch.branchnum = "+std::to_string(branch)+"; ";
+    std::string sql = "SELECT sellmotion FROM products "
+        "JOIN warehouse ON products.warehousID = warehouse.Id "
+        "JOIN branch ON warehouse.branch = branch.branchnum "
+        "WHERE branch.branchnum = "+std::to_string(branch)+" ;";
     char* errmsg=nullptr;
     if (sqlite3_exec(db, sql.c_str(), callback, &result, &errmsg) != SQLITE_OK) {
         std::string err = errmsg;
